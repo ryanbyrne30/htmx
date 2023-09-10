@@ -7,7 +7,7 @@ To run
 
 or
 
-`./basic_wiki`
+`go build . && ./basic_wiki`
 
 and open `localhost:8080/view/test`
 
