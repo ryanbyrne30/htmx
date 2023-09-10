@@ -1,0 +1,14 @@
+{{ template "header" .}}
+
+<h2>{{.Title}}</h2>
+
+<form action="/save/{{.Title}}" method="POST">
+  <label>
+    Body
+    <textarea name="body" rows="20" cols="80">{{printf "%s" .Body}}</textarea>
+  </label>
+
+  <div>
+    <input type="submit" value="Save" />
+  </div>
+</form>
