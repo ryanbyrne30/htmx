@@ -1,11 +1,28 @@
 package main
 
 import (
+	"net/http"
 	"os"
 	"strconv"
 )
 
 const countFile = "data/count.txt"
+
+func ButtonClickHandler(w http.ResponseWriter, r *http.Request) {
+	count, err := ReadCount()
+	if err != nil {
+		handleError(w, err)
+	}
+	err = templates.ExecuteTemplate(w, "click.html", count)
+	if err != nil {
+		handleError(w, err)
+	}
+	err = WriteCount(count + 1)
+	if err != nil {
+		handleError(w, err)
+	}
+}
+
 
 func ReadCount() (int, error) {
 	data, err := os.ReadFile(countFile)
