@@ -1,5 +1,11 @@
 {{define "header"}}
 
+<script src="https://unpkg.com/htmx.org@1.9.5"></script>
+
 <h1>Welcome to the Wiki!</h1>
+
+<div>
+  <button hx-get="/click" hx-swap="outerHTML">Click me</button>
+</div>
 
 {{end}}
