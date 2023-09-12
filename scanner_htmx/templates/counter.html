@@ -1,0 +1,6 @@
+{{define "main"}}
+<section id="count"></section>
+<button hx-get="/api/count/" hx-target="#count" hx-swap="innerHTML">
+  Click me!
+</button>
+{{end}}

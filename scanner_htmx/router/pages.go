@@ -7,13 +7,22 @@ import (
 	"github.com/ryanbyrne30/htmx/scanner_htmx/context"
 )
 
-var templates = template.Must(template.ParseFiles("templates/home.html"))
 var homeTemplates = template.Must(template.ParseFiles("templates/home.html", "templates/base.html"))
+var counterTemplates = template.Must(template.ParseFiles("templates/counter.html", "templates/base.html"))
 
 func InitPages(r *mux.Router) {
+	r.HandleFunc("/count/", MakeHandler(counterHandler))
 	r.HandleFunc("/", MakeHandler(homeHandler))
 }
 
+func renderPageTemplate(ctx context.Context, templates *template.Template, data any) {
+	RenderTemplate(ctx.GetResponseWriter(), templates, "base", data)
+}
+
 func homeHandler(ctx context.Context) {
-	RenderTemplate(ctx.GetResponseWriter(), homeTemplates, "base", nil)
+	renderPageTemplate(ctx, homeTemplates, nil)
+}
+
+func counterHandler(ctx context.Context) {
+	renderPageTemplate(ctx, counterTemplates, 0)
 }

@@ -9,6 +9,14 @@
   </head>
 
   <body>
-    <main>{{template "main" .}}</main>
+    <main
+      class="w-screen min-h-[100dvh] flex flex-col items-center justify-center p-8"
+    >
+      {{template "main" .}}
+    </main>
   </body>
+
+  <footer>
+    <script src="https://unpkg.com/htmx.org@1.9.5"></script>
+  </footer>
 </html>

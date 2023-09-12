@@ -15,9 +15,9 @@ func MakeHandler(handler func (ctx context.Context)) http.HandlerFunc {
 	}
 }
 
-func RenderTemplate(w http.ResponseWriter, template *template.Template, temp string, data any) {
+func RenderTemplate(w http.ResponseWriter, templates *template.Template, temp string, data any) {
 	name := temp + ".html"
-	err := template.ExecuteTemplate(w, name, data)
+	err := templates.ExecuteTemplate(w, name, data)
 	if err != nil {
 		handleError(w, err)
 	}
