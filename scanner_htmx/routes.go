@@ -1,8 +1,10 @@
 package main
 
 import (
+	"fmt"
 	"html/template"
 	"net/http"
+	"runtime/debug"
 )
 
 var homeTemplates = template.Must(template.ParseFiles("templates/home.html", "templates/base.html"))
@@ -35,7 +37,20 @@ func (app *application) renderTemplate(w http.ResponseWriter, templates *templat
 	name := temp + ".html"
 	err := templates.ExecuteTemplate(w, name, data)
 	if err != nil {
-		app.errorLog.Print(err)
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		app.serverError(w, err)
 	}
+}
+
+func (app *application) clientError(w http.ResponseWriter, status int) {
+	http.Error(w, http.StatusText(status), status)
+}
+
+func (app *application) serverError(w http.ResponseWriter, err error) {
+	trace := fmt.Sprintf("%s\n%s", err.Error(), debug.Stack())
+	app.errorLog.Println(trace)
+	http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+}
+
+func (app *application) notFound(w http.ResponseWriter) {
+	app.clientError(w, http.StatusNotFound)
 }
