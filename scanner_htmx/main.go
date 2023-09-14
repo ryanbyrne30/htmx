@@ -3,15 +3,21 @@ package main
 import (
 	"flag"
 	"fmt"
+	"log"
 	"net/http"
+	"os"
 
 	"github.com/gorilla/mux"
-	"github.com/ryanbyrne30/htmx/scanner_htmx/router"
 )
 
 type config struct {
 	publicDir string
 	port int
+}
+
+type application struct {
+	errorLog *log.Logger
+	infoLog *log.Logger
 }
 
 func main() {
@@ -21,10 +27,20 @@ func main() {
 	flag.IntVar(&cfg.port, "port", 8080, "port to run the server on. Default 8080")
 	flag.Parse()
 
-	r := mux.NewRouter()
-	r.PathPrefix("/static/").Handler(http.StripPrefix("/static/", http.FileServer(http.Dir(cfg.publicDir))))
+	var infoLog = log.New(os.Stdout, "INFO\t", log.Ldate|log.Ltime)
+	var errorLog = log.New(os.Stderr, "ERROR\t", log.Ldate|log.Ltime)
 
-	router.Init(r, infoLog, errorLog)
+	app := &application{
+		errorLog: errorLog,
+		infoLog: infoLog,
+	}
+
+	r := mux.NewRouter()
+	r.Use(app.logMw)
+	r.PathPrefix("/static/").Handler(http.StripPrefix("/static/", http.FileServer(http.Dir(cfg.publicDir))))
+	r.HandleFunc("/api/count/", app.countClickHandler)
+	r.HandleFunc("/count/", app.counterHandler)
+	r.HandleFunc("/", app.homeHandler)
 
 	srv := &http.Server{
 		Addr: fmt.Sprintf(":%v", cfg.port),
