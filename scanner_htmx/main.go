@@ -9,15 +9,19 @@ import (
 	"github.com/ryanbyrne30/htmx/scanner_htmx/router"
 )
 
-func main() {
-	var publicDir string
+type config struct {
+	publicDir string
+}
 
-	flag.StringVar(&publicDir, "public", "./static", "the directory to server static files from. Defaults to ./static")
+func main() {
+	var cfg config
+
+	flag.StringVar(&cfg.publicDir, "public", "./static", "the directory to server static files from. Defaults to ./static")
 	flag.Parse()
 
 	r := mux.NewRouter()
-	r.PathPrefix("/static/").Handler(http.StripPrefix("/static/", http.FileServer(http.Dir(publicDir))))
+	r.PathPrefix("/static/").Handler(http.StripPrefix("/static/", http.FileServer(http.Dir(cfg.publicDir))))
 
-	router.Init(r)
+	router.Init(r, InfoLog, ErrorLog)
 	log.Fatal(http.ListenAndServe(":8080", r))
 }

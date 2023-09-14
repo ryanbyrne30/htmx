@@ -1,6 +1,11 @@
 {{define "main"}}
-<section id="count"></section>
-<button hx-get="/api/count/" hx-target="#count" hx-swap="innerHTML">
+<h1>This page uses view transitions!</h1>
+<section id="count" class="slide-it py-20"></section>
+<button
+  hx-get="/api/count/"
+  hx-target="#count"
+  hx-swap="innerHTML transition:true"
+>
   Click me!
 </button>
 {{end}}

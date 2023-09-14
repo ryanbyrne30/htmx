@@ -566,6 +566,11 @@ video {
   padding: 2rem;
 }
 
+.py-20 {
+  padding-top: 5rem;
+  padding-bottom: 5rem;
+}
+
 .font-mono {
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
 }
@@ -584,4 +589,42 @@ body {
   background-color: rgb(0 0 0 / var(--tw-bg-opacity));
   --tw-text-opacity: 1;
   color: rgb(255 255 255 / var(--tw-text-opacity));
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes fade-out {
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes slide-from-right {
+  from {
+    transform: translateX(90px);
+  }
+}
+
+@keyframes slide-to-left {
+  to {
+    transform: translateX(-90px);
+  }
+}
+
+.slide-it {
+  view-transition-name: slide-it;
+}
+
+::view-transition-old(slide-it) {
+  animation: 180ms cubic-bezier(0.4, 0, 1, 1) both fade-out,
+    600ms cubic-bezier(0.4, 0, 0.2, 1) both slide-to-left;
+}
+
+::view-transition-new(slide-it) {
+  animation: 420ms cubic-bezier(0, 0, 0.2, 1) 90ms both fade-in,
+    600ms cubic-bezier(0.4, 0, 0.2, 1) both slide-from-right;
 }
