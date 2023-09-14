@@ -1,55 +1,66 @@
 package main
 
 import (
+	"database/sql"
 	"flag"
 	"fmt"
 	"log"
 	"net/http"
 	"os"
 
-	"github.com/gorilla/mux"
+	_ "github.com/mattn/go-sqlite3"
+	"github.com/ryanbyrne30/htmx/scanner_htmx/internal/models"
 )
-
-type config struct {
-	publicDir string
-	port int
-}
 
 type application struct {
 	errorLog *log.Logger
 	infoLog *log.Logger
+	snippets *models.SnippetModel
 }
 
 func main() {
-	var cfg config
-
-	flag.StringVar(&cfg.publicDir, "public", "./static", "the directory to server static files from. Defaults to ./static")
-	flag.IntVar(&cfg.port, "port", 8080, "port to run the server on. Default 8080")
+	dsn := flag.String("dsn", "./data/app.db", "port to run the server on. Default 8080")
+	port := flag.Int("port", 8080, "port to run the server on. Default 8080")
 	flag.Parse()
 
+	// initialize loggers
 	var infoLog = log.New(os.Stdout, "INFO\t", log.Ldate|log.Ltime)
 	var errorLog = log.New(os.Stderr, "ERROR\t", log.Ldate|log.Ltime)
 
+	// initialize database
+	db, err := openDb(*dsn)
+	if err != nil {
+		errorLog.Fatal(err)
+	}
+	defer db.Close()
+
+	// initialize application
 	app := &application{
 		errorLog: errorLog,
 		infoLog: infoLog,
+		snippets: &models.SnippetModel{DB: db},
 	}
 
-	r := mux.NewRouter()
-	r.Use(app.logMw)
-	r.PathPrefix("/static/").Handler(http.StripPrefix("/static/", http.FileServer(http.Dir(cfg.publicDir))))
-	r.HandleFunc("/api/count/", app.countClickHandler)
-	r.HandleFunc("/count/", app.counterHandler)
-	r.HandleFunc("/", app.homeHandler)
-
+	// initialize server
 	srv := &http.Server{
-		Addr: fmt.Sprintf(":%v", cfg.port),
+		Addr: fmt.Sprintf(":%v", *port),
 		ErrorLog: errorLog,
-		Handler: r,
+		Handler: app.routes(),
 	}
 
-	infoLog.Printf("Starting server on port %v", cfg.port)
+	infoLog.Printf("Starting server on port %v", *port)
 
-	err := srv.ListenAndServe()
+	err = srv.ListenAndServe()
 	errorLog.Fatal(err)
+}
+
+func openDb(dsn string) (*sql.DB, error) {
+	db, err := sql.Open("sqlite3", dsn)
+	if err != nil {
+		return nil, err
+	}
+	if err = db.Ping(); err != nil {
+		return nil, err
+	}
+	return db, nil
 }

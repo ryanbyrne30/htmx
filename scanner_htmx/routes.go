@@ -5,12 +5,28 @@ import (
 	"html/template"
 	"net/http"
 	"runtime/debug"
+
+	"github.com/gorilla/mux"
 )
 
 var homeTemplates = template.Must(template.ParseFiles("templates/home.html", "templates/base.html"))
 var counterTemplates = template.Must(template.ParseFiles("templates/counter.html", "templates/base.html"))
 var countClickTemplate = template.Must(template.ParseFiles("templates/count.html"))
 var count = 0
+
+func (app *application) routes() *mux.Router {
+	r := mux.NewRouter()
+	r.Use(app.logMw)
+
+	fileServer := http.FileServer(http.Dir("./static"))
+	r.PathPrefix("/static/").Handler(http.StripPrefix("/static/", fileServer))
+
+	r.HandleFunc("/api/count/", app.countClickHandler)
+	r.HandleFunc("/count/", app.counterHandler)
+	r.HandleFunc("/", app.homeHandler)
+
+	return r
+}
 
 func (app *application) homeHandler(w http.ResponseWriter, r *http.Request) {
 	app.renderTemplate(w, homeTemplates, "base", nil)
