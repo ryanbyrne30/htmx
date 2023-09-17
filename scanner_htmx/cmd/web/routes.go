@@ -13,9 +13,10 @@ func (app *application) routes() *mux.Router {
 	fileServer := http.FileServer(http.Dir("./ui/static"))
 	r.PathPrefix("/static/").Handler(http.StripPrefix("/static/", fileServer))
 
-	r.HandleFunc("/api/count/", app.countClickHandler)
-	r.HandleFunc("/api/snippets/", app.snippetCreate)
-	r.HandleFunc("/count/", app.counterHandler)
+	r.HandleFunc("/api/count", app.countClickHandler)
+	r.HandleFunc("/api/snippets", app.snippetCreate)
+	r.HandleFunc("/snippets/view", app.snippetView)
+	r.HandleFunc("/count", app.counterHandler)
 	r.HandleFunc("/", app.homeHandler)
 
 	return r
