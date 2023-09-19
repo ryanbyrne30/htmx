@@ -1,24 +1,22 @@
-{{define "title"}}{{.Snippet.Title}}{{end}} {{define "main"}}
+{{define "title"}}{{.Snippet.Title}}{{end}} {{define "main"}} {{with .Snippet}}
 <article class="w-full max-w-4xl flex flex-col border-2 border-slate-700">
   <header
     class="flex flex-row gap-4 items-center justify-between p-4 bg-slate-700"
   >
-    <h1 class="text-2xl">{{.Snippet.Title}}</h1>
-    <h2 class="text-lg font-mono text-slate-400 font-medium">
-      #{{.Snippet.ID}}
-    </h2>
+    <h1 class="text-2xl">{{.Title}}</h1>
+    <h2 class="text-lg font-mono text-slate-400 font-medium">#{{.ID}}</h2>
   </header>
 
   <div class="w-full bg-slate-800 p-4">
-    <p class="max-w-sm whitespace-pre-wrap">{{.Snippet.Content}}</p>
+    <p class="max-w-sm whitespace-pre-wrap">{{.Content}}</p>
   </div>
 
   <footer
     class="text-sm p-4 bg-slate-700 text-slate-400 font-mono flex flex-row flex-wrap gap-2 items-center justify-between"
   >
-    <span>created: {{.Snippet.Created}}</span>
-    <span>expires: {{.Snippet.Expires}}</span>
+    <span>created: {{humanDate .Created}}</span>
+    <span>expires: {{humanDate .Expires}}</span>
   </footer>
 </article>
 
-{{end}}
+{{end}} {{end}}
