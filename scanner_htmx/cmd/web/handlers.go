@@ -66,7 +66,7 @@ func (app *application) snippetsView(w http.ResponseWriter, r *http.Request) {
 		Snippets: snippets,
 	}
 
-	app.renderTemplate(w, snippetsTemplates, "base", data)
+	app.render(w, http.StatusFound, "snippets", data)
 }
 
 func (app *application) snippetView(w http.ResponseWriter, r *http.Request) {
@@ -86,15 +86,13 @@ func (app *application) snippetView(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	app.infoLog.Println("Content before:", snippet.Content)
 	snippet.Content = strings.ReplaceAll(snippet.Content, "\\n", "\n")
 	snippet.Content = strings.TrimSpace(snippet.Content)
-	app.infoLog.Println("Content after:", snippet.Content)
 
 	data := &templateData{
 		Snippet: snippet,
 	}
-	app.renderTemplate(w, snippetTemplates, "base", data)
+	app.render(w, http.StatusFound, "snippet", data)
 }
 
 

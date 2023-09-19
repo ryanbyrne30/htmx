@@ -24,7 +24,7 @@ func (app *application) render(w http.ResponseWriter, status int, page string, d
 
 	w.WriteHeader(status)
 
-	err := ts.ExecuteTemplate(w, "base", data)
+	err := ts.ExecuteTemplate(w, "base.html", data)
 	if err != nil {
 		app.serverError(w, err)
 	}
