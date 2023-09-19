@@ -13,8 +13,6 @@ import (
 )
 
 var homeTemplates = template.Must(template.ParseFiles("./ui/html/pages/home.html", "./ui/html/base.html", "./ui/html/partials/nav.html"))
-var snippetsTemplates = template.Must(template.ParseFiles("./ui/html/pages/snippets.html", "./ui/html/base.html", "./ui/html/partials/nav.html"))
-var snippetTemplates = template.Must(template.ParseFiles("./ui/html/pages/snippet.html", "./ui/html/base.html", "./ui/html/partials/nav.html"))
 var counterTemplates = template.Must(template.ParseFiles("./ui/html/pages/counter.html", "./ui/html/base.html", "./ui/html/partials/nav.html"))
 var countClickTemplate = template.Must(template.ParseFiles("./ui/html/partials/count.html"))
 var count = 0
