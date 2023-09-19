@@ -8,6 +8,7 @@ import (
 
 func (app *application) routes() *mux.Router {
 	r := mux.NewRouter()
+	r.Use(app.secureHeadersMw)
 	r.Use(app.logMw)
 
 	fileServer := http.FileServer(http.Dir("./ui/static"))
