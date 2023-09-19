@@ -13,7 +13,7 @@
     {{range .Snippets}}
     <tr>
       <td class="px-2 py-1 border border-gray-700">
-        <a href="/snippets/view?id={{.ID}}">{{.Title}}</a>
+        <a href="/snippets/{{.ID}}">{{.Title}}</a>
       </td>
       <td class="px-2 py-1 border border-gray-700">{{humanDate .Created}}</td>
       <td class="px-2 py-1 border border-gray-700">{{.ID}}</td>

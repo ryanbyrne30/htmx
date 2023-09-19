@@ -9,6 +9,7 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/gorilla/mux"
 	"github.com/ryanbyrne30/htmx/scanner_htmx/internal/models"
 )
 
@@ -68,7 +69,10 @@ func (app *application) snippetsView(w http.ResponseWriter, r *http.Request) {
 }
 
 func (app *application) snippetView(w http.ResponseWriter, r *http.Request) {
-	id, err := strconv.Atoi(r.URL.Query().Get("id"))
+	params := mux.Vars(r)
+
+	id, err := strconv.Atoi(params["id"])
+
 	if err != nil || id < 1 {
 		app.notFound(w)
 		return

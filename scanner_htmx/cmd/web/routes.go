@@ -17,8 +17,8 @@ func (app *application) routes() *mux.Router {
 
 	r.HandleFunc("/api/count", app.countClickHandler)
 	r.HandleFunc("/api/snippets", app.snippetCreate)
-	r.HandleFunc("/snippets/view", app.snippetView)
-	r.HandleFunc("/snippets", app.snippetsView)
+	r.HandleFunc("/snippets/{id}", app.snippetView).Methods(http.MethodGet)
+	r.HandleFunc("/snippets", app.snippetsView).Methods(http.MethodGet)
 	r.HandleFunc("/count", app.counterHandler)
 	r.HandleFunc("/", app.homeHandler)
 
