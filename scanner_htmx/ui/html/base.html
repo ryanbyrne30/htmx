@@ -9,8 +9,9 @@
   </head>
 
   <body>
+    {{template "nav" .}}
     <main
-      class="w-screen min-h-[100dvh] flex flex-col items-center justify-center p-8"
+      class="w-screen min-h-[100dvh] flex flex-col gap-4 items-center justify-center p-8"
     >
       {{template "main" .}}
     </main>

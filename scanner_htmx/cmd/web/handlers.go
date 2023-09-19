@@ -7,29 +7,26 @@ import (
 	"net/http"
 	"runtime/debug"
 	"strconv"
+	"strings"
 
 	"github.com/ryanbyrne30/htmx/scanner_htmx/internal/models"
 )
 
-var homeTemplates = template.Must(template.ParseFiles("./ui/html/pages/home.html", "./ui/html/base.html"))
-var counterTemplates = template.Must(template.ParseFiles("./ui/html/pages/counter.html", "./ui/html/base.html"))
+var homeTemplates = template.Must(template.ParseFiles("./ui/html/pages/home.html", "./ui/html/base.html", "./ui/html/partials/nav.html"))
+var snippetsTemplates = template.Must(template.ParseFiles("./ui/html/pages/snippets.html", "./ui/html/base.html", "./ui/html/partials/nav.html"))
+var snippetTemplates = template.Must(template.ParseFiles("./ui/html/pages/snippet.html", "./ui/html/base.html", "./ui/html/partials/nav.html"))
+var counterTemplates = template.Must(template.ParseFiles("./ui/html/pages/counter.html", "./ui/html/base.html", "./ui/html/partials/nav.html"))
 var countClickTemplate = template.Must(template.ParseFiles("./ui/html/partials/count.html"))
 var count = 0
 
+type snippetTemplateData struct {
+	Snippet *models.Snippet
+	Snippets []*models.Snippet
+}
 
 
 func (app *application) homeHandler(w http.ResponseWriter, r *http.Request) {
-	snippets, err := app.snippets.Latest()
-	if err != nil {
-		app.serverError(w, err)
-		return
-	}
-
-	for _, snippet := range snippets {
-		fmt.Fprintf(w, "%+v\n\n", snippet)
-	}
-
-	// app.renderTemplate(w, homeTemplates, "base", nil)
+	app.renderTemplate(w, homeTemplates, "base", nil)
 }
 
 func (app *application) counterHandler(w http.ResponseWriter, r *http.Request) {
@@ -61,6 +58,20 @@ func (app *application) snippetCreate(w http.ResponseWriter, r *http.Request) {
 	http.Redirect(w, r, fmt.Sprintf("/snippet/view?id=%d", id), http.StatusSeeOther)
 }
 
+func (app *application) snippetsView(w http.ResponseWriter, r *http.Request) {
+	snippets, err := app.snippets.Latest()
+	if err != nil {
+		app.serverError(w, err)
+		return
+	}
+
+	data := &snippetTemplateData{
+		Snippets: snippets,
+	}
+
+	app.renderTemplate(w, snippetsTemplates, "base", data)
+}
+
 func (app *application) snippetView(w http.ResponseWriter, r *http.Request) {
 	id, err := strconv.Atoi(r.URL.Query().Get("id"))
 	if err != nil || id < 1 {
@@ -78,7 +89,15 @@ func (app *application) snippetView(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	fmt.Fprintf(w, "%+v", snippet)
+	app.infoLog.Println("Content before:", snippet.Content)
+	snippet.Content = strings.ReplaceAll(snippet.Content, "\\n", "\n")
+	snippet.Content = strings.TrimSpace(snippet.Content)
+	app.infoLog.Println("Content after:", snippet.Content)
+
+	data := &snippetTemplateData{
+		Snippet: snippet,
+	}
+	app.renderTemplate(w, snippetTemplates, "base", data)
 }
 
 

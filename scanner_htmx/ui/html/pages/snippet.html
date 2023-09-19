@@ -1,0 +1,8 @@
+{{define "title"}}{{.Snippet.Title}}{{end}} {{define "main"}}
+<header class="flex flex-col gap-2 items-center text-center">
+  <h1>{{.Snippet.Title}}</h1>
+  <h2 class="text-lg text-gray-700 font-medium">ID: {{.Snippet.ID}}</h2>
+</header>
+
+<p class="max-w-sm whitespace-pre-wrap">{{.Snippet.Content}}</p>
+{{end}}
