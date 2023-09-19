@@ -19,14 +19,11 @@ var counterTemplates = template.Must(template.ParseFiles("./ui/html/pages/counte
 var countClickTemplate = template.Must(template.ParseFiles("./ui/html/partials/count.html"))
 var count = 0
 
-type snippetTemplateData struct {
-	Snippet *models.Snippet
-	Snippets []*models.Snippet
-}
+
 
 
 func (app *application) homeHandler(w http.ResponseWriter, r *http.Request) {
-	app.renderTemplate(w, homeTemplates, "base", nil)
+	app.render(w, http.StatusFound, "home", nil)
 }
 
 func (app *application) counterHandler(w http.ResponseWriter, r *http.Request) {
@@ -65,7 +62,7 @@ func (app *application) snippetsView(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	data := &snippetTemplateData{
+	data := &templateData{
 		Snippets: snippets,
 	}
 
@@ -94,7 +91,7 @@ func (app *application) snippetView(w http.ResponseWriter, r *http.Request) {
 	snippet.Content = strings.TrimSpace(snippet.Content)
 	app.infoLog.Println("Content after:", snippet.Content)
 
-	data := &snippetTemplateData{
+	data := &templateData{
 		Snippet: snippet,
 	}
 	app.renderTemplate(w, snippetTemplates, "base", data)
