@@ -10,6 +10,8 @@ import (
 	"os"
 	"time"
 
+	"github.com/alexedwards/scs/sqlite3store"
+	"github.com/alexedwards/scs/v2"
 	"github.com/go-playground/form/v4"
 	_ "github.com/mattn/go-sqlite3"
 	"github.com/ryanbyrne30/htmx/scanner_htmx/internal/models"
@@ -21,6 +23,7 @@ type application struct {
 	snippets *models.SnippetModel
 	templateCache map[string]*template.Template
 	formDecoder *form.Decoder
+	sessionManager *scs.SessionManager
 }
 
 func main() {
@@ -50,6 +53,11 @@ func main() {
 		return time.Parse("2006-01-02T15:04", vals[0])
 	}, time.Time{})
 
+	// initialize session manager
+	sessionManager := scs.New()
+	sessionManager.Store = sqlite3store.New(db)
+	sessionManager.Lifetime = 12 * time.Hour
+
 	// initialize application
 	app := &application{
 		errorLog: errorLog,
@@ -57,6 +65,7 @@ func main() {
 		snippets: &models.SnippetModel{DB: db},
 		templateCache: templateCache,
 		formDecoder: formDecoder,
+		sessionManager: sessionManager,
 	}
 
 	// initialize server

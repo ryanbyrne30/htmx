@@ -18,15 +18,18 @@ func (app *application) routes() *mux.Router {
 
 	fileServer := http.FileServer(http.Dir("./ui/static"))
 	r.PathPrefix("/static/").Handler(http.StripPrefix("/static/", fileServer))
+	
+	snippetsR := r.NewRoute().Subrouter()
+	snippetsR.Use(app.sessionManager.LoadAndSave)
+	snippetsR.HandleFunc("/snippets/create", app.snippetCreate).Methods(http.MethodGet)
+	snippetsR.HandleFunc("/snippets/create", app.snippetCreatePost).Methods(http.MethodPost)
+	snippetsR.HandleFunc("/snippets/{id}", app.snippetView).Methods(http.MethodGet)
+	snippetsR.HandleFunc("/snippets", app.snippetsView).Methods(http.MethodGet)
 
 	r.HandleFunc("/api/count", app.countClickHandler)
-	r.HandleFunc("/api/snippets", app.snippetCreate)
-	r.HandleFunc("/snippets/create", app.snippetCreate).Methods(http.MethodGet)
-	r.HandleFunc("/snippets/create", app.snippetCreatePost).Methods(http.MethodPost)
-	r.HandleFunc("/snippets/{id}", app.snippetView).Methods(http.MethodGet)
-	r.HandleFunc("/snippets", app.snippetsView).Methods(http.MethodGet)
 	r.HandleFunc("/count", app.counterHandler)
 	r.HandleFunc("/", app.homeHandler)
+	
 
 	return r
 }

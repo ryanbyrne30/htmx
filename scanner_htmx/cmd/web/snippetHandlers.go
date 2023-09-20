@@ -55,6 +55,8 @@ func (app *application) snippetCreatePost(w http.ResponseWriter, r *http.Request
 		return
 	}
 
+	app.sessionManager.Put(r.Context(), "flash", "Snippet successfully created!")
+
 	http.Redirect(w, r, fmt.Sprintf("/snippets/%d", id), http.StatusSeeOther)
 }
 
@@ -95,8 +97,11 @@ func (app *application) snippetView(w http.ResponseWriter, r *http.Request) {
 	snippet.Content = strings.ReplaceAll(snippet.Content, "\\n", "\n")
 	snippet.Content = strings.TrimSpace(snippet.Content)
 
+	flash := app.sessionManager.PopString(r.Context(), "flash")
+
 	data := &templateData{
 		Snippet: snippet,
+		Flash: flash,
 	}
 	app.render(w, http.StatusFound, "snippet", data)
 }

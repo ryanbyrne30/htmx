@@ -13,7 +13,13 @@
     <main
       class="w-screen min-h-[100dvh] flex flex-col gap-4 items-center justify-center p-8"
     >
-      {{template "main" .}}
+      {{with .Flash}}
+      <p
+        class="p-2 bg-slate-700 shadow-md font-medium w-full text-center font-mono"
+      >
+        {{.}}
+      </p>
+      {{end}} {{template "main" .}}
     </main>
   </body>
 
