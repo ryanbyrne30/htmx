@@ -11,6 +11,7 @@ import (
 type templateData struct {
 	Snippet *models.Snippet
 	Snippets []*models.Snippet
+	Form any
 }
 
 func (app *application) render(w http.ResponseWriter, status int, page string, data *templateData) {

@@ -10,8 +10,16 @@ func humanDate(t time.Time) string {
 	return t.Format("02 Jan 2006 at 15:04")
 }
 
+func errToString(err error) string {
+	if err != nil {
+		return err.Error()
+	}
+	return ""
+}
+
 var functions = template.FuncMap{
 	"humanDate": humanDate,
+	"errToString": errToString,
 }
 
 func newTemplateCache() (map[string]*template.Template, error) {
