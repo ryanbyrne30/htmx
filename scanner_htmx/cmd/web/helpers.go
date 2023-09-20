@@ -15,6 +15,7 @@ type templateData struct {
 	Snippets []*models.Snippet
 	Form any
 	Flash string
+	IsAuthenticated bool
 }
 
 func (app *application) render(w http.ResponseWriter, status int, page string, data *templateData) {
@@ -61,5 +62,10 @@ func (app *application) decodePostForm(r *http.Request, dst any) error {
 func (app *application) newTemplateData(r *http.Request) *templateData {
 	return &templateData{
 		Flash: app.sessionManager.PopString(r.Context(), "flash"),
+		IsAuthenticated: app.isAuthenticated(r),
 	}
+}
+
+func (app *application) isAuthenticated(r *http.Request) bool {
+	return app.sessionManager.Exists(r.Context(), "authenticatedUserId")
 }

@@ -15,17 +15,20 @@
   </ul>
 
   <ul class="flex flex-row items-center justify-center gap-8">
+    {{if .IsAuthenticated}}
+    <li>
+      <form method="post" action="/users/logout">
+        <button type="submit">Logout</button>
+      </form>
+    </li>
+    {{else}}
     <li>
       <a href="/users/signup">Sign Up</a>
     </li>
     <li>
       <a href="/users/login">Login</a>
     </li>
-    <li>
-      <form method="post" action="/users/logout">
-        <button type="submit">Logout</button>
-      </form>
-    </li>
+    {{end}}
   </ul>
 </nav>
 {{end}}
