@@ -14,10 +14,10 @@ import (
 )
 
 type snippetCreateForm struct {
-	Title string 
-	Content string 
-	Expires time.Time
-	validator.Validator
+	Title 			string 		`form:"title"`
+	Content 		string 		`form:"content"`
+	Expires 		time.Time	`form:"expires"`
+	validator.Validator		`form:"-"`
 }
 
 func (app *application) snippetCreate(w http.ResponseWriter, r *http.Request) {
@@ -29,29 +29,13 @@ func (app *application) snippetCreate(w http.ResponseWriter, r *http.Request) {
 }
 
 func (app *application) snippetCreatePost(w http.ResponseWriter, r *http.Request) {
-	err := r.ParseForm()
+	var form snippetCreateForm
+
+	err := app.decodePostForm(r, &form)
 	if err != nil {
 		app.clientError(w, http.StatusBadRequest)
 		return
 	}
-
-	title := r.PostForm.Get("title")
-	content := r.PostForm.Get("content")
-	
-	form := &snippetCreateForm{
-		Title: r.PostForm.Get("title"),
-		Content: r.PostForm.Get("content"),
-	}
-
-	expires, err := time.Parse("2006-01-02T15:04", r.PostForm.Get("expires")) 
-	if err != nil {
-		form.Validator.FieldErrors["expires"] = err.Error()
-		app.render(w, http.StatusBadRequest, "snippetCreate", &templateData{
-			Form: form,
-		})		
-		return
-	}
-	form.Expires = expires
 	
 	form.CheckField(form.NotBlank(form.Title), "title", "This field cannot be blank")
 	form.CheckField(form.MaxChars(form.Title, 100), "title", "This field cannot be more than 100 characters")
@@ -60,14 +44,12 @@ func (app *application) snippetCreatePost(w http.ResponseWriter, r *http.Request
 	form.CheckField(form.FutureDate(form.Expires), "expires", "This field must be a future date")
 	
 	if !form.Valid() {
-		data := &templateData{
-			Form: form,
-		}
+		data := &templateData{ Form: form }
 		app.render(w, http.StatusBadRequest, "snippetCreate", data)
 		return
 	}
 
-	id, err := app.snippets.Insert(title, content, expires)
+	id, err := app.snippets.Insert(form.Title, form.Content, form.Expires)
 	if err != nil {
 		app.serverError(w, err)
 		return

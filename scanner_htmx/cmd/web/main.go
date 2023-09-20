@@ -8,7 +8,9 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"time"
 
+	"github.com/go-playground/form/v4"
 	_ "github.com/mattn/go-sqlite3"
 	"github.com/ryanbyrne30/htmx/scanner_htmx/internal/models"
 )
@@ -18,6 +20,7 @@ type application struct {
 	infoLog *log.Logger
 	snippets *models.SnippetModel
 	templateCache map[string]*template.Template
+	formDecoder *form.Decoder
 }
 
 func main() {
@@ -41,12 +44,19 @@ func main() {
 		errorLog.Fatal(err)
 	}
 
+	// initialize form decoder
+	formDecoder := form.NewDecoder()
+	formDecoder.RegisterCustomTypeFunc(func (vals []string) (interface{}, error) {
+		return time.Parse("2006-01-02T15:04", vals[0])
+	}, time.Time{})
+
 	// initialize application
 	app := &application{
 		errorLog: errorLog,
 		infoLog: infoLog,
 		snippets: &models.SnippetModel{DB: db},
 		templateCache: templateCache,
+		formDecoder: formDecoder,
 	}
 
 	// initialize server
