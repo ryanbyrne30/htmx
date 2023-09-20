@@ -12,6 +12,10 @@ func (app *application) homeHandler(w http.ResponseWriter, r *http.Request) {
 	app.render(w, http.StatusFound, "home", data)
 }
 
+func ping(w http.ResponseWriter, r *http.Request) {
+	w.Write([]byte("OK"))
+}
+
 
 func (app *application) clientError(w http.ResponseWriter, status int) {
 	http.Error(w, http.StatusText(status), status)
