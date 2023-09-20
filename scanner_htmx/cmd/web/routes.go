@@ -31,6 +31,7 @@ func (app *application) routes() *mux.Router {
 	sessionR.HandleFunc("/users/signup", app.userSignupPost).Methods(http.MethodPost)
 	sessionR.HandleFunc("/users/login", app.userLogin).Methods(http.MethodGet)
 	sessionR.HandleFunc("/users/login", app.userLoginPost).Methods(http.MethodPost)
+	sessionR.HandleFunc("/users/logout", app.userLogoutPost).Methods(http.MethodPost)
 
 	sessionR.HandleFunc("/api/count", app.countClickHandler)
 	sessionR.HandleFunc("/count", app.counterHandler)

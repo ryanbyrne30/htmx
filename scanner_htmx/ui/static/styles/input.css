@@ -69,6 +69,7 @@ select {
   @apply bg-slate-800 text-white p-2 px-4 rounded outline-none border border-transparent focus:border-blue-700;
 }
 
-button {
-  @apply px-4 py-2 rounded bg-orange-400 text-black font-medium;
+button,
+button[type="submit"] {
+  @apply px-4 py-2 rounded font-medium bg-orange-500 text-black;
 }
