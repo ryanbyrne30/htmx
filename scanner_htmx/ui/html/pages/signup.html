@@ -2,6 +2,8 @@
 <form method="POST" action="/users/signup">
   <h1>Sign Up</h1>
 
+  {{template "csrftoken" .}}
+
   <label>
     Name
     <input

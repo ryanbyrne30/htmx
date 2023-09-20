@@ -20,12 +20,13 @@ func (app *application) routes() *mux.Router {
 	r.PathPrefix("/static/").Handler(http.StripPrefix("/static/", fileServer))
 	
 	sessionR := r.NewRoute().Subrouter()
-	sessionR.Use(app.sessionManager.LoadAndSave)
+	sessionR.Use(app.sessionManager.LoadAndSave, app.noSurfMw)
 
 	// snippets routers
 	snippetsR := sessionR.PathPrefix("/snippets").Subrouter()
 	protectedSnippetsR := snippetsR.NewRoute().Subrouter()
 	protectedSnippetsR.Use(app.requireAuthMw)
+
 	protectedSnippetsR.HandleFunc("/create", app.snippetCreate).Methods(http.MethodGet)
 	protectedSnippetsR.HandleFunc("/create", app.snippetCreatePost).Methods(http.MethodPost)
 	snippetsR.HandleFunc("/{id}", app.snippetView).Methods(http.MethodGet)

@@ -562,6 +562,10 @@ video {
   display: table;
 }
 
+.hidden {
+  display: none;
+}
+
 .min-h-\[100dvh\] {
   min-height: 100dvh;
 }

@@ -2,6 +2,8 @@
 <form method="POST" action="/snippets/create">
   <h1>Create New Snippet</h1>
 
+  {{template "csrftoken" .}}
+
   <section>
     <label>
       Title

@@ -18,6 +18,7 @@
     {{if .IsAuthenticated}}
     <li>
       <form method="post" action="/users/logout">
+        {{template "csrftoken" .}}
         <button type="submit">Logout</button>
       </form>
     </li>

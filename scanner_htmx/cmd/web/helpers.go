@@ -7,6 +7,7 @@ import (
 	"net/http"
 
 	"github.com/go-playground/form/v4"
+	"github.com/justinas/nosurf"
 	"github.com/ryanbyrne30/htmx/scanner_htmx/internal/models"
 )
 
@@ -16,6 +17,7 @@ type templateData struct {
 	Form any
 	Flash string
 	IsAuthenticated bool
+	CSRFToken string
 }
 
 func (app *application) render(w http.ResponseWriter, status int, page string, data *templateData) {
@@ -63,6 +65,7 @@ func (app *application) newTemplateData(r *http.Request) *templateData {
 	return &templateData{
 		Flash: app.sessionManager.PopString(r.Context(), "flash"),
 		IsAuthenticated: app.isAuthenticated(r),
+		CSRFToken: nosurf.Token(r),
 	}
 }
 
