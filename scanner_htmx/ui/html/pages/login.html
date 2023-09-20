@@ -1,0 +1,32 @@
+{{define "title"}}Sign Up{{end}} {{define "main"}}
+<form method="POST" action="/users/login">
+  <h1>Login</h1>
+
+  <label>
+    Email
+    <input
+      type="email"
+      name="email"
+      placeholder="Your email"
+      value="{{.Form.Email}}"
+    />
+    {{with .Form.FieldErrors.email}}
+    <span>{{.}}</span>
+    {{end}}
+  </label>
+
+  <label>
+    Password
+    <input type="password" name="password" />
+    {{with .Form.FieldErrors.password}}
+    <span>{{.}}</span>
+    {{end}}
+  </label>
+
+  {{range .Form.NonFieldErrors}}
+  <p class="text-red-300 italic">{{.}}</p>
+  {{end}}
+
+  <button type="submit" class="bg-orange-500">Login</button>
+</form>
+{{end}}

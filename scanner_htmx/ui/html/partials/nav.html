@@ -1,11 +1,28 @@
 {{define "nav"}}
-<nav class="fixed top-0 left-0 right-0">
+<nav
+  class="fixed p-4 top-0 left-0 right-0 flex flex-row flex-wrap item-center gap-8 justify-between"
+>
   <ul class="flex flex-row items-center justify-center gap-8">
     <li>
       <a href="/">Home</a>
     </li>
     <li>
       <a href="/snippets">Snippets</a>
+    </li>
+    <li>
+      <a href="/snippets/create">New</a>
+    </li>
+  </ul>
+
+  <ul class="flex flex-row items-center justify-center gap-8">
+    <li>
+      <a href="/users/signup">Sign Up</a>
+    </li>
+    <li>
+      <a href="/users/login">Login</a>
+    </li>
+    <li>
+      <a href="/users/logout">Logout</a>
     </li>
   </ul>
 </nav>

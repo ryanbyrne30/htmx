@@ -22,3 +22,10 @@ You can then setup a net/http FileServer to expose the files in `/static` allowi
   <link href="/static/styles/output.css" rel="stylesheet">
 </head>
 ```
+
+## Creating TLS Certs for using HTTPS
+
+```
+cd tls
+go run /usr/local/go/src/crypto/tls/generate_cert.go --rsa-bits=2048 --host=localhost
+```

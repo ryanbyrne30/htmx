@@ -1,0 +1,41 @@
+{{define "title"}}Sign Up{{end}} {{define "main"}}
+<form method="POST" action="/users/signup">
+  <h1>Sign Up</h1>
+
+  <label>
+    Name
+    <input
+      type="text"
+      name="name"
+      placeholder="Your full name"
+      value="{{.Form.Name}}"
+    />
+    {{with .Form.FieldErrors.name}}
+    <span>{{.}}</span>
+    {{end}}
+  </label>
+
+  <label>
+    Email
+    <input
+      type="email"
+      name="email"
+      placeholder="Your email"
+      value="{{.Form.Email}}"
+    />
+    {{with .Form.FieldErrors.email}}
+    <span>{{.}}</span>
+    {{end}}
+  </label>
+
+  <label>
+    Password
+    <input type="password" name="password" />
+    {{with .Form.FieldErrors.password}}
+    <span>{{.}}</span>
+    {{end}}
+  </label>
+
+  <button type="submit" class="bg-orange-500">Sign Up</button>
+</form>
+{{end}}

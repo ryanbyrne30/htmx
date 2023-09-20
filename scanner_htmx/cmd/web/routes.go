@@ -19,16 +19,22 @@ func (app *application) routes() *mux.Router {
 	fileServer := http.FileServer(http.Dir("./ui/static"))
 	r.PathPrefix("/static/").Handler(http.StripPrefix("/static/", fileServer))
 	
-	snippetsR := r.NewRoute().Subrouter()
-	snippetsR.Use(app.sessionManager.LoadAndSave)
-	snippetsR.HandleFunc("/snippets/create", app.snippetCreate).Methods(http.MethodGet)
-	snippetsR.HandleFunc("/snippets/create", app.snippetCreatePost).Methods(http.MethodPost)
-	snippetsR.HandleFunc("/snippets/{id}", app.snippetView).Methods(http.MethodGet)
-	snippetsR.HandleFunc("/snippets", app.snippetsView).Methods(http.MethodGet)
+	sessionR := r.NewRoute().Subrouter()
+	sessionR.Use(app.sessionManager.LoadAndSave)
 
-	r.HandleFunc("/api/count", app.countClickHandler)
-	r.HandleFunc("/count", app.counterHandler)
-	r.HandleFunc("/", app.homeHandler)
+	sessionR.HandleFunc("/snippets/create", app.snippetCreate).Methods(http.MethodGet)
+	sessionR.HandleFunc("/snippets/create", app.snippetCreatePost).Methods(http.MethodPost)
+	sessionR.HandleFunc("/snippets/{id}", app.snippetView).Methods(http.MethodGet)
+	sessionR.HandleFunc("/snippets", app.snippetsView).Methods(http.MethodGet)
+
+	sessionR.HandleFunc("/users/signup", app.userSignup).Methods(http.MethodGet)
+	sessionR.HandleFunc("/users/signup", app.userSignupPost).Methods(http.MethodPost)
+	sessionR.HandleFunc("/users/login", app.userLogin).Methods(http.MethodGet)
+	sessionR.HandleFunc("/users/login", app.userLoginPost).Methods(http.MethodPost)
+
+	sessionR.HandleFunc("/api/count", app.countClickHandler)
+	sessionR.HandleFunc("/count", app.counterHandler)
+	sessionR.HandleFunc("/", app.homeHandler)
 	
 
 	return r

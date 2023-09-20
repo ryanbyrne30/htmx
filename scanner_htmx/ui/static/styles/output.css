@@ -586,10 +586,6 @@ video {
   flex-direction: row;
 }
 
-.flex-row-reverse {
-  flex-direction: row-reverse;
-}
-
 .flex-col {
   flex-direction: column;
 }
@@ -648,6 +644,21 @@ video {
   border-color: rgb(51 65 85 / var(--tw-border-opacity));
 }
 
+.bg-orange-400 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(251 146 60 / var(--tw-bg-opacity));
+}
+
+.bg-orange-500 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(249 115 22 / var(--tw-bg-opacity));
+}
+
+.bg-slate-300 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(203 213 225 / var(--tw-bg-opacity));
+}
+
 .bg-slate-700 {
   --tw-bg-opacity: 1;
   background-color: rgb(51 65 85 / var(--tw-bg-opacity));
@@ -658,14 +669,8 @@ video {
   background-color: rgb(30 41 59 / var(--tw-bg-opacity));
 }
 
-.bg-orange-400 {
-  --tw-bg-opacity: 1;
-  background-color: rgb(251 146 60 / var(--tw-bg-opacity));
-}
-
-.bg-slate-300 {
-  --tw-bg-opacity: 1;
-  background-color: rgb(203 213 225 / var(--tw-bg-opacity));
+.p-2 {
+  padding: 0.5rem;
 }
 
 .p-4 {
@@ -674,10 +679,6 @@ video {
 
 .p-8 {
   padding: 2rem;
-}
-
-.p-2 {
-  padding: 0.5rem;
 }
 
 .px-2 {
@@ -731,14 +732,23 @@ video {
   font-weight: 500;
 }
 
-.text-slate-400 {
-  --tw-text-opacity: 1;
-  color: rgb(148 163 184 / var(--tw-text-opacity));
+.italic {
+  font-style: italic;
 }
 
 .text-red-500 {
   --tw-text-opacity: 1;
   color: rgb(239 68 68 / var(--tw-text-opacity));
+}
+
+.text-slate-400 {
+  --tw-text-opacity: 1;
+  color: rgb(148 163 184 / var(--tw-text-opacity));
+}
+
+.text-red-300 {
+  --tw-text-opacity: 1;
+  color: rgb(252 165 165 / var(--tw-text-opacity));
 }
 
 .shadow-md {
@@ -809,12 +819,24 @@ a:hover {
   color: rgb(192 132 252 / var(--tw-text-opacity));
 }
 
+form {
+  display: flex;
+  width: 100%;
+  max-width: 36rem;
+  flex-direction: column;
+  gap: 2rem;
+}
+
 label {
   display: flex;
   flex-direction: column;
   gap: 0.25rem;
-  padding-top: 2rem;
-  padding-bottom: 2rem;
+}
+
+label span {
+  font-style: italic;
+  --tw-text-opacity: 1;
+  color: rgb(252 165 165 / var(--tw-text-opacity));
 }
 
 input,

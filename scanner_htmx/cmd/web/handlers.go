@@ -13,7 +13,8 @@ var count = 0
 
 
 func (app *application) homeHandler(w http.ResponseWriter, r *http.Request) {
-	app.render(w, http.StatusFound, "home", nil)
+	data := app.newTemplateData(r)
+	app.render(w, http.StatusFound, "home", data)
 }
 
 func (app *application) counterHandler(w http.ResponseWriter, r *http.Request) {

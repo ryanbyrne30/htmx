@@ -51,8 +51,16 @@ a {
   @apply font-medium text-purple-300 hover:text-purple-400;
 }
 
+form {
+  @apply flex flex-col gap-8 w-full max-w-xl;
+}
+
 label {
-  @apply flex flex-col gap-1 py-8;
+  @apply flex flex-col gap-1;
+}
+
+label span {
+  @apply text-red-300 italic;
 }
 
 input,

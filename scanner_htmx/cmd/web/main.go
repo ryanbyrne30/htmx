@@ -1,6 +1,7 @@
 package main
 
 import (
+	"crypto/tls"
 	"database/sql"
 	"flag"
 	"fmt"
@@ -21,6 +22,7 @@ type application struct {
 	errorLog *log.Logger
 	infoLog *log.Logger
 	snippets *models.SnippetModel
+	users *models.UserModel
 	templateCache map[string]*template.Template
 	formDecoder *form.Decoder
 	sessionManager *scs.SessionManager
@@ -57,15 +59,30 @@ func main() {
 	sessionManager := scs.New()
 	sessionManager.Store = sqlite3store.New(db)
 	sessionManager.Lifetime = 12 * time.Hour
+	sessionManager.Cookie.Secure = true
 
 	// initialize application
 	app := &application{
 		errorLog: errorLog,
 		infoLog: infoLog,
 		snippets: &models.SnippetModel{DB: db},
+		users: &models.UserModel{DB: db},
 		templateCache: templateCache,
 		formDecoder: formDecoder,
 		sessionManager: sessionManager,
+	}
+
+	// config TLS
+	tlsConfig := &tls.Config{
+		CurvePreferences: []tls.CurveID{tls.X25519, tls.CurveP256}, // ignore other CPU intensive algs
+		CipherSuites: []uint16{		// support more secure cipher suites
+			tls.TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384,
+			tls.TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384,
+			tls.TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305,
+			tls.TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305,
+			tls.TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256,
+			tls.TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,
+		},
 	}
 
 	// initialize server
@@ -73,11 +90,15 @@ func main() {
 		Addr: fmt.Sprintf(":%v", *port),
 		ErrorLog: errorLog,
 		Handler: app.routes(),
+		TLSConfig: tlsConfig,
+		IdleTimeout: time.Minute,
+		ReadTimeout: 5 * time.Second,
+		WriteTimeout: 10 * time.Second,
 	}
 
 	infoLog.Printf("Starting server on port %v", *port)
 
-	err = srv.ListenAndServe()
+	err = srv.ListenAndServeTLS("./tls/cert.pem", "./tls/key.pem")
 	errorLog.Fatal(err)
 }
 
