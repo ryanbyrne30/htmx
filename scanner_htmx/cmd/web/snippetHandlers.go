@@ -21,11 +21,12 @@ type snippetCreateForm struct {
 }
 
 func (app *application) snippetCreate(w http.ResponseWriter, r *http.Request) {
-	app.render(w, http.StatusFound, "snippetCreate", &templateData{
-		Form: &snippetCreateForm{
-			Expires: time.Now(),
-		},
-	})
+	data := app.newTemplateData(r)
+	data.Form = &snippetCreateForm{
+		Expires: time.Now().Add(3 * time.Hour),
+	}
+
+	app.render(w, http.StatusFound, "snippetCreate", data)
 }
 
 func (app *application) snippetCreatePost(w http.ResponseWriter, r *http.Request) {
@@ -43,8 +44,10 @@ func (app *application) snippetCreatePost(w http.ResponseWriter, r *http.Request
 	form.CheckField(form.MaxChars(form.Content, 1000), "content", "This field cannot be more than 1000 characters")
 	form.CheckField(form.FutureDate(form.Expires), "expires", "This field must be a future date")
 	
+	data := app.newTemplateData(r)
+
 	if !form.Valid() {
-		data := &templateData{ Form: form }
+		data.Form = form
 		app.render(w, http.StatusBadRequest, "snippetCreate", data)
 		return
 	}
@@ -97,11 +100,8 @@ func (app *application) snippetView(w http.ResponseWriter, r *http.Request) {
 	snippet.Content = strings.ReplaceAll(snippet.Content, "\\n", "\n")
 	snippet.Content = strings.TrimSpace(snippet.Content)
 
-	flash := app.sessionManager.PopString(r.Context(), "flash")
+	data := app.newTemplateData(r)
+	data.Snippet = snippet
 
-	data := &templateData{
-		Snippet: snippet,
-		Flash: flash,
-	}
 	app.render(w, http.StatusFound, "snippet", data)
 }
