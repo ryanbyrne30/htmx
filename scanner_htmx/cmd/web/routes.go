@@ -9,7 +9,7 @@ import (
 func (app *application) routes() *mux.Router {
 	r := mux.NewRouter()
 	r.Use(app.recoverPanicMw)
-	r.Use(app.secureHeadersMw)
+	r.Use(secureHeaders)
 	r.Use(app.logMw)
 
 	r.NotFoundHandler = http.HandlerFunc(func (w http.ResponseWriter, r *http.Request) {
