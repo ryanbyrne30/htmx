@@ -7,21 +7,25 @@ import (
 	"strconv"
 	"strings"
 	"time"
-	"unicode/utf8"
 
 	"github.com/gorilla/mux"
 	"github.com/ryanbyrne30/htmx/scanner_htmx/internal/models"
+	"github.com/ryanbyrne30/htmx/scanner_htmx/internal/validator"
 )
 
 type snippetCreateForm struct {
 	Title string 
 	Content string 
 	Expires time.Time
-	FieldErrors map[string]string
+	validator.Validator
 }
 
 func (app *application) snippetCreate(w http.ResponseWriter, r *http.Request) {
-	app.render(w, http.StatusFound, "snippetCreate", &templateData{})
+	app.render(w, http.StatusFound, "snippetCreate", &templateData{
+		Form: &snippetCreateForm{
+			Expires: time.Now(),
+		},
+	})
 }
 
 func (app *application) snippetCreatePost(w http.ResponseWriter, r *http.Request) {
@@ -37,12 +41,11 @@ func (app *application) snippetCreatePost(w http.ResponseWriter, r *http.Request
 	form := &snippetCreateForm{
 		Title: r.PostForm.Get("title"),
 		Content: r.PostForm.Get("content"),
-		FieldErrors: map[string]string{},
 	}
 
 	expires, err := time.Parse("2006-01-02T15:04", r.PostForm.Get("expires")) 
 	if err != nil {
-		form.FieldErrors["expires"] = err.Error()
+		form.Validator.FieldErrors["expires"] = err.Error()
 		app.render(w, http.StatusBadRequest, "snippetCreate", &templateData{
 			Form: form,
 		})		
@@ -50,23 +53,13 @@ func (app *application) snippetCreatePost(w http.ResponseWriter, r *http.Request
 	}
 	form.Expires = expires
 	
-	if strings.TrimSpace(form.Title) == "" {
-		form.FieldErrors["title"] = "This field cannot be blank"
-	} else if utf8.RuneCountInString(form.Title) > 100 {
-		form.FieldErrors["title"] = "This field cannot be more than 100 characters"
-	}
-
-	if strings.TrimSpace(form.Content) == "" {
-		form.FieldErrors["content"] = "This field cannot be blank"
-	} else if utf8.RuneCountInString(form.Content) > 1000 {
-		form.FieldErrors["content"] = "This field cannot be more than 1000 characters"
-	}
-
-	if form.Expires.Compare(time.Now()) < 0 {
-		form.FieldErrors["expires"] = "Expiration must be after current time"
-	}
-
-	if len(form.FieldErrors) > 0 {
+	form.CheckField(form.NotBlank(form.Title), "title", "This field cannot be blank")
+	form.CheckField(form.MaxChars(form.Title, 100), "title", "This field cannot be more than 100 characters")
+	form.CheckField(form.NotBlank(form.Content), "content", "This field cannot be blank")
+	form.CheckField(form.MaxChars(form.Content, 1000), "content", "This field cannot be more than 1000 characters")
+	form.CheckField(form.FutureDate(form.Expires), "expires", "This field must be a future date")
+	
+	if !form.Valid() {
 		data := &templateData{
 			Form: form,
 		}

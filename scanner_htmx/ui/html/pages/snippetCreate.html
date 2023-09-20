@@ -32,7 +32,11 @@
   <section>
     <label>
       Expires
-      <input type="datetime-local" name="expires" value="{{.Form.Expires}}" />
+      <input
+        type="datetime-local"
+        name="expires"
+        value="{{inputDate .Form.Expires}}"
+      />
     </label>
     {{with .Form.FieldErrors.expires}}
     <span class="text-red-500">{{.}}</span>
