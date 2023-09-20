@@ -42,11 +42,6 @@ func (app *application) routes() *mux.Router {
 	usersR.HandleFunc("/login", app.userLoginPost).Methods(http.MethodPost)
 	protectedUsersR.HandleFunc("/logout", app.userLogoutPost).Methods(http.MethodPost)
 
-
-	sessionR.HandleFunc("/api/count", app.countClickHandler)
-	sessionR.HandleFunc("/count", app.counterHandler)
 	sessionR.HandleFunc("/", app.homeHandler)
-	
-
 	return r
 }

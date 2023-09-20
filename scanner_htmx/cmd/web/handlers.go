@@ -2,14 +2,9 @@ package main
 
 import (
 	"fmt"
-	"html/template"
 	"net/http"
 	"runtime/debug"
 )
-
-var counterTemplates = template.Must(template.ParseFiles("./ui/html/pages/counter.html", "./ui/html/base.html", "./ui/html/partials/nav.html"))
-var countClickTemplate = template.Must(template.ParseFiles("./ui/html/partials/count.html"))
-var count = 0
 
 
 func (app *application) homeHandler(w http.ResponseWriter, r *http.Request) {
@@ -17,24 +12,6 @@ func (app *application) homeHandler(w http.ResponseWriter, r *http.Request) {
 	app.render(w, http.StatusFound, "home", data)
 }
 
-func (app *application) counterHandler(w http.ResponseWriter, r *http.Request) {
-	app.renderTemplate(w, counterTemplates, "base", 0)
-}
-
-func (app *application) countClickHandler(w http.ResponseWriter, r *http.Request) {
-	count += 1
-	app.renderTemplate(w, countClickTemplate, "count", count)
-}
-
-
-
-func (app *application) renderTemplate(w http.ResponseWriter, templates *template.Template, temp string, data any) {
-	name := temp + ".html"
-	err := templates.ExecuteTemplate(w, name, data)
-	if err != nil {
-		app.serverError(w, err)
-	}
-}
 
 func (app *application) clientError(w http.ResponseWriter, status int) {
 	http.Error(w, http.StatusText(status), status)
