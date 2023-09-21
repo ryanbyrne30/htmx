@@ -72,7 +72,7 @@ func (app *application) snippetsView(w http.ResponseWriter, r *http.Request) {
 	data := app.newTemplateData(r)
 	data.Snippets = snippets
 
-	app.render(w, http.StatusFound, "snippets", data)
+	app.render(w, http.StatusOK, "snippets", data)
 }
 
 func (app *application) snippetView(w http.ResponseWriter, r *http.Request) {
@@ -94,12 +94,12 @@ func (app *application) snippetView(w http.ResponseWriter, r *http.Request) {
 		}
 		return
 	}
-
+		
 	snippet.Content = strings.ReplaceAll(snippet.Content, "\\n", "\n")
 	snippet.Content = strings.TrimSpace(snippet.Content)
-
+	
 	data := app.newTemplateData(r)
 	data.Snippet = snippet
 
-	app.render(w, http.StatusFound, "snippet", data)
+	app.render(w, http.StatusOK, "snippet", data)
 }

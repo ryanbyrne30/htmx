@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/gorilla/mux"
+	"github.com/ryanbyrne30/htmx/scanner_htmx/ui"
 )
 
 func (app *application) routes() *mux.Router {
@@ -16,8 +17,8 @@ func (app *application) routes() *mux.Router {
 		app.notFound(w)
 	})
 
-	fileServer := http.FileServer(http.Dir("./ui/static"))
-	r.PathPrefix("/static/").Handler(http.StripPrefix("/static/", fileServer))
+	fileServer := http.FileServer(http.FS(ui.Files))
+	r.PathPrefix("/static/").Handler(fileServer)
 	r.HandleFunc("/ping", ping).Methods(http.MethodGet)
 	
 	sessionR := r.NewRoute().Subrouter()
