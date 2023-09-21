@@ -18,6 +18,7 @@ func (app *application) routes() *mux.Router {
 
 	fileServer := http.FileServer(http.Dir("./ui/static"))
 	r.PathPrefix("/static/").Handler(http.StripPrefix("/static/", fileServer))
+	r.HandleFunc("/ping", ping).Methods(http.MethodGet)
 	
 	sessionR := r.NewRoute().Subrouter()
 	sessionR.Use(app.sessionManager.LoadAndSave, app.noSurfMw, app.authenticate)
