@@ -3,7 +3,7 @@ package mocks
 import (
 	"time"
 
-	"github.com/ryanbyrne30/htmx/scanner_htmx/internal/models"
+	"github.com/ryanbyrne30/htmx/web_app/internal/models"
 )
 
 var mockSnippet = &models.Snippet{

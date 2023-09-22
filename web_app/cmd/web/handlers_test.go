@@ -5,7 +5,7 @@ import (
 	"net/url"
 	"testing"
 
-	"github.com/ryanbyrne30/htmx/scanner_htmx/internal/assert"
+	"github.com/ryanbyrne30/htmx/web_app/internal/assert"
 )
 
 func TestPing(t *testing.T) {

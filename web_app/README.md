@@ -29,3 +29,11 @@ You can then setup a net/http FileServer to expose the files in `/static` allowi
 cd tls
 go run /usr/local/go/src/crypto/tls/generate_cert.go --rsa-bits=2048 --host=localhost
 ```
+
+# Run
+
+`go run ./cmd/web/`
+
+# Test
+
+`go test ./cmd/web/`

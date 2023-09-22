@@ -1,6 +1,6 @@
 package mocks
 
-import "github.com/ryanbyrne30/htmx/scanner_htmx/internal/models"
+import "github.com/ryanbyrne30/htmx/web_app/internal/models"
 
 type UserModel struct {}
 

@@ -4,8 +4,8 @@ import (
 	"errors"
 	"net/http"
 
-	"github.com/ryanbyrne30/htmx/scanner_htmx/internal/models"
-	"github.com/ryanbyrne30/htmx/scanner_htmx/internal/validator"
+	"github.com/ryanbyrne30/htmx/web_app/internal/models"
+	"github.com/ryanbyrne30/htmx/web_app/internal/validator"
 )
 
 type userSignupForm struct {

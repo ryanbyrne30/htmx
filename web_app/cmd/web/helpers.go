@@ -8,7 +8,7 @@ import (
 
 	"github.com/go-playground/form/v4"
 	"github.com/justinas/nosurf"
-	"github.com/ryanbyrne30/htmx/scanner_htmx/internal/models"
+	"github.com/ryanbyrne30/htmx/web_app/internal/models"
 )
 
 type templateData struct {

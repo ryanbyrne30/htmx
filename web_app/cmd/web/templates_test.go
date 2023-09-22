@@ -4,7 +4,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/ryanbyrne30/htmx/scanner_htmx/internal/assert"
+	"github.com/ryanbyrne30/htmx/web_app/internal/assert"
 )
 
 func TestHumanDate(t *testing.T) {

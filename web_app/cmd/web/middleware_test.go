@@ -7,7 +7,7 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"github.com/ryanbyrne30/htmx/scanner_htmx/internal/assert"
+	"github.com/ryanbyrne30/htmx/web_app/internal/assert"
 )
 
 func TestSecureHeaders(t *testing.T) {

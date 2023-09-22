@@ -15,7 +15,7 @@ import (
 	"github.com/alexedwards/scs/v2"
 	"github.com/go-playground/form/v4"
 	_ "github.com/mattn/go-sqlite3"
-	"github.com/ryanbyrne30/htmx/scanner_htmx/internal/models"
+	"github.com/ryanbyrne30/htmx/web_app/internal/models"
 )
 
 type application struct {
