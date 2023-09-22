@@ -6,7 +6,7 @@ type UserModel struct {}
 
 func (u *UserModel) Insert(name, email, password string) error {
 	switch email {
-	case "test@example.com":
+	case "dupe@example.com":
 		return models.ErrDuplicateEmail
 	default:
 		return nil

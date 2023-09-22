@@ -1,5 +1,5 @@
 {{define "title"}}Sign Up{{end}} {{define "main"}}
-<form method="POST" action="/users/signup">
+<form method="POST" action="/users/signup" novalidate>
   <h1>Sign Up</h1>
 
   {{template "csrftoken" .}}

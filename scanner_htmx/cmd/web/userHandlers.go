@@ -33,6 +33,7 @@ func (app *application) userSignupPost(w http.ResponseWriter, r *http.Request) {
 	form.CheckField(form.NotBlank(form.Name), "name", "This field cannot be blank")
 	form.CheckField(form.MaxChars(form.Name, 50), "name", "This field cannot exceed 50 characters")
 	form.CheckField(form.NotBlank(form.Email), "email", "This field cannot be blank")
+	form.CheckField(form.Matches(form.Email, validator.EmailRx), "email", "Invalid email")
 	form.CheckField(form.NotBlank(string(form.Password)), "password", "This field cannot be blank")
 	form.CheckField(form.MinChars(string(form.Password), 3), "password", "This field must have at least 3 characters")
 
@@ -40,7 +41,7 @@ func (app *application) userSignupPost(w http.ResponseWriter, r *http.Request) {
 
 	if !form.Valid() {
 		data.Form = form
-		app.render(w, http.StatusBadRequest, "signup", data)
+		app.render(w, http.StatusUnprocessableEntity, "signup", data)
 		return		
 	}
 
@@ -49,7 +50,7 @@ func (app *application) userSignupPost(w http.ResponseWriter, r *http.Request) {
 		if errors.Is(err, models.ErrDuplicateEmail) {
 			form.AddFieldError("email", "Email already exists")
 			data.Form = form 
-			app.render(w, http.StatusBadRequest, "signup", data)
+			app.render(w, http.StatusUnprocessableEntity, "signup", data)
 		} else {
 			app.serverError(w, err)
 		}

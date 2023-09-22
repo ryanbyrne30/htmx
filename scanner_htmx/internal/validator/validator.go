@@ -1,6 +1,7 @@
 package validator
 
 import (
+	"regexp"
 	"strings"
 	"time"
 	"unicode/utf8"
@@ -10,6 +11,8 @@ type Validator struct {
 	NonFieldErrors []string
 	FieldErrors map[string]string
 }
+
+var EmailRx = regexp.MustCompile("^[a-zA-Z0-9.!#$%&'*+\\/=?^_`{|}~-]+@[a-zA-Z0-9]+\\.[a-zA-Z]+")
 
 func (v *Validator) Valid() bool {
 	return len(v.FieldErrors) == 0 && len(v.NonFieldErrors) == 0
@@ -49,4 +52,8 @@ func (v *Validator) MinChars(value string, n int) bool {
 
 func (v *Validator) FutureDate(value time.Time) bool {
 	return value.Compare(time.Now()) >= 0
+}
+
+func (v *Validator) Matches(value string, rx *regexp.Regexp) bool {
+	return rx.MatchString(value)
 }
